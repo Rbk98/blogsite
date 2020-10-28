@@ -1,0 +1,61 @@
+
+/*présentation des formulaires */ 
+.connexionform, .inscriptionform{
+	width: 50%;
+	margin: 0 auto;
+
+}
+
+/*présentation des tableaux des formulaires*/
+#connexiontable,#inscriptiontable, #formulairetable{
+	margin: 0 auto;
+	padding-bottom: 20px;
+}
+
+.container_section{
+	background-color: white;
+}
+
+i{
+	font-size: 10px;
+}
+
+/*présentation des introductions*/
+.introconnexion{
+    border: none;
+    text-align: center;
+    background-color: lightskyblue;
+    border: 2px solid black;
+    font-variant: small-caps;
+    font-weight: bold;
+}
+
+/*présentation de la legende*/
+legend{
+	background-color: #343a40;
+	color: white;
+    font-size: 20px;
+    text-align: center;
+}
+
+/*classe utilisée dans le javascript*/
+.manquant{
+	border-bottom-color: red;
+}
+
+.oblig{
+	width: 150px;	
+}
+
+.para{
+	font-weight: bold;
+}
+
+section{
+	text-align: center;
+}
+
+	
+td{
+	text-align: right;
+}
