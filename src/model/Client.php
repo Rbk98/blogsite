@@ -13,7 +13,7 @@ class Client
     private $nom;
     private $prenom;
     private $password;
-    private $isadmin;
+    private $isadmin = 0;
     private $last_connection_at;
 
 
@@ -22,6 +22,7 @@ class Client
         $database = new Database;
         $db = $database->getConnection();
         $result = $db->query('SELECT * FROM client');
+
         return $result->fetchAll();
     }
     
@@ -57,7 +58,7 @@ class Client
 
     public function getAdmin()
     {
-        return $this->isadmin;
+        return (int) $this->isadmin;
     }
 
     public function getLastConnection()
@@ -67,39 +68,34 @@ class Client
 
 
     
-    public function setId()
+    public function setId($id)
     {
-        return $this->id;
+        $this->id =$id;
     }
 
-    public function setUsername()
+    public function setUsername($username)
     {
-        return $this->username;
+       $this->username = $username;
     }
 
-    public function setMail()
+    public function setMail($mail)
     {
-        return $this->mail;
+        $this->mail =$mail;
     }
 
-    public function setNom()
+    public function setNom($nom)
     {
-        return $this->nom;
+        $this->nom = $nom;
     }
 
-    public function setPrenom()
+    public function setPrenom($prenom)
     {
-        return $this->prenom;
+        $this->prenom = $prenom;
     }
 
-    public function setPassword()
+    public function setPassword($password)
     {
-        return $this->password;
-    }
-
-    public function setAdmin()
-    {
-        return $this->isadmin;
+        $this->password = $password;
     }
 
     public function setLastConnection()

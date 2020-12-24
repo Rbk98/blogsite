@@ -3,54 +3,74 @@ namespace App\src\controller;
 
 use App\src\model\Commentaire;
 use App\src\repository\CommentRepository;
+use App\src\config\Session;
 
 
 //CRUD
 class CommentController {
-    private $postRep;
 
     public function __construct()
     {
-        if (!isset($this->postRep)) {
-            $this->postRep = new CommentRepository;
+        if (!isset($this->session)) {            
+            $this->session = new Session;
+        }
+
+        if (!isset($this->commentRepository)) {
+            $this->commentRepository = new CommentRepository;
         }
     }
 
-    public function create()
+    public function liste()
     {
-        if(isset($_POST['id_client'])){
-            $comment = new Commentaire;
-            $comment->setIdClient($_POST['id_client']);
-            $comment->setIdPost($_POST['id_post']);
-            $comment->setContent($_POST['content']);
-            $comment->setCreatedAt(date('Y-m-d H:i:s'));
-            $this->postRep->createComments($comment);
+        $comments = $this->commentRepository->getComments($_POST['idpost']);
+        return $comments;        
+    }
 
-            header('Location: index.php/?page=post&action=liste');
-        }else{
-            header('Location: index.php');
-        }
+    public function create()
+    {    
         
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $comment = new Commentaire;
+            $comment->setIdPost($_POST['idpost']);
+            $comment->setIdClient($this->session->get('id'));
+            $comment->setContent($_POST['content']);
+            $this->commentRepository->createComments($comment);
+        }
+        header('Location: ?page=post&action=liste');
+        
+    
+    }
+
+    public function read()
+    {   
+        $commentLecture = $this->commentRepository->getComments($this->session->get('idpost'));
+        return $commentLecture;
+        require('templates/commentaire.php');
+
     }
 
     public function update()
     {
-        if(isset($_POST['id_client'])){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $comment = new Commentaire;
-            $comment->setId($_POST['id']);
-            $comment->setIdClient($_POST['id_client']);
-            $comment->setIdPost($_POST['id_post']);
+            $comment->setId($_POST['id_comment']);
             $comment->setContent($_POST['content']);
-            $comment->setUpdatedAt(date('Y-m-d H:i:s')); //deux fois ?
-            $this->postRep->updateComments($comment);
-        
-            header('Location: index.php/?page=post&action=liste');
+            $comment->setUpdatedAt(date('Y-m-d H:i:s'));
+            $this->commentRepository->updateComments($comment);
         }
-        
+
+        header('Location: ?page=post&action=liste');
     }
 
     public function delete()
     {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $comment = new Commentaire;
+            $comment->setId($_POST['id_comment']);
+            $comment->setDeletedAt(date('Y-m-d H:i:s'));
+            $this->commentRepository->deleteComments($comment);
+            header('Location: ?page=post&action=liste');
+        }
         
     }
 }

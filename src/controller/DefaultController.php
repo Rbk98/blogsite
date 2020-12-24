@@ -2,7 +2,7 @@
 
 namespace App\src\controller;
 
-use App\src\Repository\ClientRepository;
+use App\src\repository\ClientRepository;
 
 class DefaultController
 {

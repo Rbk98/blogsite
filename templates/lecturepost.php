@@ -1,43 +1,77 @@
-<?php 
-    ob_start();
+<?php
+ob_start();
 ?>
 
 <div class="container_section">
-<fieldset style="margin:8%;">
-<br>
-<p> <b>Contenu du post : </b></p>
-<hr>
-<?php 
-$user= 'rbk98';
-$password = 'devweb20';
-try {
-    $connection = new PDO('mysql:dbname=avenoel;host=localhost', $user, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+    <fieldset style="margin:6%;">
+        <br>
+        <h1 style="text-align:center; margin-bottom:2%;"><u>Titre</u> : <?= $postLecture['title']; ?></h1>
+        <hr>
+        <p> <b><u> Contenu du post </u>: </b></p>
+        <hr>
+        <p class="text"><?= $postLecture['content']; ?></p>
+        <br>
+    </fieldset>
+    <hr style="border: 10px solid #51B0FF; border-radius: 5px; margin: 10px;"> 
+    <p style="margin-left:6%;"> <b><u> Commentaires</u> :</b></p><br>
+   <!-- Problème pour l'affichage des commentaires
+       
+   <div style="float:right; margin:2%;">
+    <form name="afficherComment" method="POST" action="?page=commentaire&action=liste">
+        <input type="hidden" name="idpost" value=" <?=$postLecture['idpost']; ?>">
+    </form> </div>
+            <input type="text" name="content" id="content" rows="6" value="<?php //echo $comment['content'];?>">
+            <?php //if (isset($_SESSION['id_client'])){
+            //if ( $_SESSION['id_client'] == $comment['id_client']){ ?>
+                <div class="shadow-lg rounded">
+                    <form name="ModifierCommentaire" action="?page=commentaire&action=update" method="POST">
+                    <div class="input-group mb-3">
+                      <input type="hidden" name="id_client" value="<?php //echo $_SESSION['id']; ?>">
+                      <input type="hidden" name="idpost" value="<?php // echo $_GET['idpost']; ?>">
+                      <input type="text" name="content" class="form-control" value="<?php //$comment['content'];?>">
+                    </form>
+                </div>
 
-} catch (PDOException $exception) {
-    die('Connexion échouée : ' . $exception->getMessage());
-}
+        <div>
+            <button class="btn btn-outline-primary" type="submit" id="modifCommentaire">Modifier</button>
+            <form name="SupprimerCommentaire" action="?page=commentaire&action=delete" method="POST">
+                 <input type="hidden" name="id_client" value="<?php echo $_SESSION['id']; ?>">
+                <input type="hidden" name="idpost" value="<?php echo $_GET['idpost']; ?>">
+                <button class="btn btn-outline-primary" type="submit" id="suppCommentaire">Supprimer</button>
+             </form>
+        </div>
 
-$statement = $connection->prepare('SELECT * FROM post');
-$result = $statement->execute();
-$donnees = $statement->fetchAll(PDO::FETCH_ASSOC);
-$content = ($donnees['content']);
+        <?php //} }?> -->
 
-echo $content;
 
-$connection = null;
-?>
-<hr>
-<br>
-<label for="exampleFormControlTextarea1"> <i>Ecrire un commentaire :</i></label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="1"></textarea> 
-    <button type="button" class="btn btn-dark" style="float:right;">Envoyer</button>
-</fieldset>
+<?php if (isset($_SESSION['id_client'])){ ?>
+<div class="shadow-lg rounded" style="margin:8%;">
+    <form name="AjoutCommentaire" action="?page=commentaire&action=create" method="POST">
+        <div class="input-group mb-2">
+            <input type="hidden" name="id_client" value="<?php echo $_SESSION['id']; ?>">
+            <p style="margin:2%;"><?php echo $_SESSION['username'];?> :</p>
+            <input type="text" style="margin:2%;" name="content" class="form-control" placeholder="Ecrire un commentaire...">
+            <div style="margin:2%;">
+                <button class="btn btn-outline-primary" type="submit" id="envoyerCommentaire">Envoyer le commentaire</button>
+            </div>
+        </div>
+    </form>
 </div>
+<?php }
+else{
+  echo '<p style="text-align:center; margin:2%;"> Veuillez vous <b><a href="?page=client&action=connect">connecter</a></b> afin d\'écrire un commentaire </p>
+  ';
+}?> 
 
+</div>
+    <br>
+    <div>
+        <button style="margin:2%;" type="button" class="btn btn-outline-primary btn-sm"> <a href="?page=post&action=liste"> Retour </a></button>
+    </div>
 
 <?php
 
-    $body = ob_get_clean();
+$body = ob_get_clean();
 
-    require ('template.php');
+require('template.php');
 ?>

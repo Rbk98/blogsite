@@ -7,7 +7,7 @@ require_once('vendor\autoload.php');
 class Post
 {
 
-    private $id;
+    private $idpost;
     private $id_client;
     private $content;
     private $title;
@@ -17,7 +17,7 @@ class Post
 
     public function getId()
     {
-        return $this->id;
+        return $this->idpost;
     }
 
     public function getIdClient()
@@ -50,9 +50,10 @@ class Post
         return $this->deleted_at;
     }
 
-    public function setId()
+    public function setId($idpost)
     {
-        return $this->id;
+        $this->idpost = $idpost;
+        return $this;
     }
 
     public function setTitle($title)
@@ -70,6 +71,24 @@ class Post
     public function setIdClient($id_client)
     {
         $this->id_client = $id_client;
+        return $this;
+    }
+
+    public function setUpdateAt($updated_at)
+    {
+        $this->updated_at= $updated_at;
+        return $this;
+    }
+
+    public function setCreatedAt($created_at)
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    public function setDeletedAt($deleted_at)
+    {
+        $this->deleted_at= $deleted_at;
         return $this;
     }
 }

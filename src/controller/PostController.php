@@ -4,6 +4,8 @@ namespace App\src\controller;
 
 use App\src\model\Post;
 use App\src\repository\PostRepository;
+use App\src\repository\CommentRepository;
+use App\src\config\Session;
 
 
 class PostController 
@@ -12,14 +14,24 @@ class PostController
 
     public function __construct()
     {
+
+        if (!isset($this->session)) {            
+            $this->session = new Session;
+        }
+
         if (!isset($this->postRep)) {
-            $this->postRep = new PostRepository();
+            $this->postRep = new PostRepository;
+        }
+
+        if (!isset($this->commentRepository)) {
+            $this->commentRepository = new CommentRepository;
         }
     }
 
     public function liste()
     {
         $posts = $this->postRep->getPosts();
+
         require('templates/actualité.php');
     }
 
@@ -29,8 +41,7 @@ class PostController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $post = new Post;
-            $post->setId($_GET['id']);
-            $post->setIdClient($_POST['id_client']);
+            $post->setIdClient($this->session->get('id'));
             $post->setContent($_POST['content']);
             $post->setTitle($_POST['title']);
             $this->postRep->insertPost($post);
@@ -41,42 +52,54 @@ class PostController
 
     public function read() //pour un seul article
     {
-        if($_GET['id'] != null){
-            $post = $this->postRep->getPosts($_GET['id']);
-            require('templates/lecturepost.php');
+
+        if(!isset($_GET['idpost'])){
+            header('Location: ?page=post&action=liste');
         }
-        else{
-            header('Location: index.php/?page=post&action=liste');
-        }
+
+        $postLecture = $this->postRep->getOnePost($_GET['idpost']);
+        require('templates/lecturepost.php');
+
     }
 
     public function update()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        if (isset($_POST['idpost'])) {
             $post = new Post;
-            $post->setId($_GET['id']);
+            $post->setId($_POST['idpost']);
             $post->setIdClient($_POST['id_client']);
             $post->setContent($_POST['content']);
             $post->setTitle($_POST['title']);
+            $post->setUpdateAt(date('Y-m-d H:i:s'));
             $this->postRep->updatePost($post);
+
         }
 
-        if($_GET['id'] != null){
-            $post = $this->postRep->getPosts($_GET['id']);
-            require('templates/modifierpost.php');
-        }else
-            header('Location: index.php?page=post&action=liste');
+        $post = $this->postRep->getOnePost($_GET['idpost']);
+    
+        require('templates/modifierpost.php');
+
     }
 
     public function delete()
     {
-        if(isset($_GET['id'])) {
-            header('Location: index.php?page=post&action=list');
+    
+        if (isset($_POST['idpost'])) {
+
+            $post = new Post;
+            $post->setId($_POST['idpost']);
+            $post->setIdClient($_POST['id_client']);
+            $post->setContent($_POST['content']);
+            $post->setTitle($_POST['title']);
+            $post->setDeletedAt(date('Y-m-d H:i:s'));
+            $this->postRep->deletePost($post);
+
         }
 
-        $this->postRepo->deletePost($_GET['id']);
+        $post = $this->postRep->getOnePost($_GET['idpost']);
 
-        require('templates/actualité.php');
+        require('templates/modifierpost.php');
         
     }
 }

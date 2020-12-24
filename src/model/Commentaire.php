@@ -105,10 +105,6 @@ class Commentaire{
         return $this;
     }
 
-
-
-
-
 }
 
 ?>
