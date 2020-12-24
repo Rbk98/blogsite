@@ -24,6 +24,8 @@ class CommentController {
     {
         $comments = $this->commentRepository->getComments($_POST['idpost']);
         return $comments;        
+        require('templates/commentaire.php');
+
     }
 
     public function create()
@@ -45,6 +47,9 @@ class CommentController {
     {   
         $commentLecture = $this->commentRepository->getComments($this->session->get('idpost'));
         return $commentLecture;
+        
+        require('templates/commentaire.php');
+
 
     }
 
