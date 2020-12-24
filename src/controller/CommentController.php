@@ -45,7 +45,6 @@ class CommentController {
     {   
         $commentLecture = $this->commentRepository->getComments($this->session->get('idpost'));
         return $commentLecture;
-        require('templates/commentaire.php');
 
     }
 
