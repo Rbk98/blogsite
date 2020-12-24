@@ -10,9 +10,7 @@ class CommentRepository
     {
         $database = new Database;
         $db = $database->checkConnection();
-        $result = $db->query("SELECT comment.id, comment.id_client, comment.content, client.username FROM comment, client WHERE comment.id_client=client.id AND comment.idpost= :idpost AND comment.deleted_at IS NULL ORDER BY comment.id DESC");
-        $result->bindValue(':idpost', $idpost, \PDO::PARAM_INT);
-
+        $result = $db->query("SELECT comment.id, comment.id_client, comment.created_at, comment.content, client.username FROM comment, client WHERE comment.id_client=client.id AND comment.idpost= $idpost AND comment.deleted_at IS NULL ORDER BY comment.id DESC");
 
         return $result->fetchAll(\PDO::FETCH_ASSOC);
         

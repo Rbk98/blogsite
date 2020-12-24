@@ -14,8 +14,7 @@ ob_start();
     </fieldset>
     <hr style="border: 10px solid #51B0FF; border-radius: 5px; margin: 10px;"> 
     <div style="margin:2%;">
-    <p style="margin-left:6%;"> <b><u> Commentaires</u></b></p><br>
-       <?php require_once ('templates/commentaire.php'); ?>
+       <button style="float: right; margin:2%;" type="button" class="btn btn-outline-primary btn-sm"> <a href="?page=commentaire&action=liste&idpost=<?= $postLecture['idpost']; ?>"> Participer à la discussion  </a></button>
     </div>
     <br>
     <div>

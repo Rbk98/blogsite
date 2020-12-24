@@ -9,6 +9,8 @@ use App\src\config\Session;
 //CRUD
 class CommentController {
 
+    private $commentRepository;
+
     public function __construct()
     {
         if (!isset($this->session)) {            
@@ -22,8 +24,7 @@ class CommentController {
 
     public function liste()
     {
-        $comments = $this->commentRepository->getComments($_POST['idpost']);
-        return $comments;        
+        $comments = $this->commentRepository->getComments($_GET['idpost']);
         require('templates/commentaire.php');
 
     }
@@ -38,7 +39,7 @@ class CommentController {
             $comment->setContent($_POST['content']);
             $this->commentRepository->createComments($comment);
         }
-        header('Location: ?page=post&action=liste');
+        header('Location: ?page=post&action=liste&idpost='.$_GET['idpost']);
         
     
     }
@@ -57,25 +58,25 @@ class CommentController {
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $comment = new Commentaire;
-            $comment->setId($_POST['id_comment']);
+            $comment->setId($_POST['id']);
             $comment->setContent($_POST['content']);
             $comment->setUpdatedAt(date('Y-m-d H:i:s'));
             $this->commentRepository->updateComments($comment);
         }
+        require('templates/updatecommentaire.php');
 
-        header('Location: ?page=post&action=liste');
     }
 
     public function delete()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $comment = new Commentaire;
-            $comment->setId($_POST['id_comment']);
+            $comment->setId($_POST['id']);
             $comment->setDeletedAt(date('Y-m-d H:i:s'));
             $this->commentRepository->deleteComments($comment);
-            header('Location: ?page=post&action=liste');
         }
-        
+        require('templates/deletecommentaire.php');
+
     }
 }
 
